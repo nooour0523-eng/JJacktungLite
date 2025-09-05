@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JJACKTUNG HUB 2</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  body { font-family: 'Inter', sans-serif; }
+
+  .fade-in { animation: fadeIn 0.6s ease-out; }
+  .slide-in { animation: slideUp 0.8s ease-out; }
+  @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+  @keyframes slideUp { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+
+  .card:hover { transform: translateY(-2px); transition: transform 0.3s ease; }
+  .btn-gradient { background: radial-gradient(#124560 0%,#8DBCD5 100%); transition: all 0.3s ease; }
+  .btn-gradient:hover { background: radial-gradient(#8DBCD5 0%, #124560 100%); transform: translateY(-1px); box-shadow: 0 8px 25px rgba(59,130,246,0.3);}
+  .btn-disabled { background: radial-gradient(#EEEEEE 0%, #C0D1D9 100%); cursor: not-allowed; opacity:0.6; }
+  .btn-outline { background: radial-gradient(#EEEEEE 0%, #C0D1D9 100%); cursor: not-allowed; opacity:0.6; }
+  .btn-outline:hover { background: radial-gradient(#C0D1D9 0%, #EEEEEE 100%); color: white; transform: translateY(-1px); }
+</style>
+</head>
+<body class="bg-gradient-to-br from-blue-100 to-blue-200 min-h-screen">
+
+<!-- 로그인 모달 -->
+<div id="loginModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+  <div class="bg-white rounded-3xl p-12 max-w-md w-full text-center shadow-xl">
+    <h1 class="text-2xl font-bold text-gray-900 mb-2">JJACKTUNG</h1>
+    <h1 class="text-3xl font-bold text-blue-600 mb-8">HUB 2</h1>
+    <input id="passwordInput" type="text" placeholder="비밀번호 입력" class="w-full px-4 py-3 rounded-full border-0 bg-gray-100 text-center focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6">
+    
+    
+    <button id="loginBtn" class="w-full py-3 rounded-full btn-gradient text-white font-medium">로그인</button>
+  </div>
+</div>
+
+<!-- 메인 페이지 -->
+<div id="mainPage" class="hidden">
+  <!-- Navigation -->
+  <nav class="bg-white/90 backdrop-blur-sm shadow-sm p-4 mb-8">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-8">
+        <h1 class="text-xl font-bold">JJACKTUNG <span class="text-blue-600">HUB</span></h1>
+        <div class="flex space-x-6 text-sm">
+          <button class="text-blue-600 font-medium">최신 자료</button>
+          <button class="text-gray-600 hover:text-gray-800 transition-colors duration-200">이전 학기 자료</button>
+          <button class="text-gray-600 hover:text-gray-800 transition-colors duration-200">모두 보기</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-6xl mx-auto px-4">
+    <div class="mb-8 fade-in slide-up">
+      <h2 class="text-3xl font-bold text-gray-800 mb-2">2025 2학기 내신 대비 자료.</h2>
+    </div>
+
+    <section class="mb-12 fade-in slide-up">
+      <div class="mb-8 fade-in slide-up">
+        <h3 class="text-2xl font-bold text-gray-800 mb-6">내신 대비 Unity 시리즈</h3>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Unit 한국사 (공개예정) -->
+        <div class="card bg-white/90 p-6 rounded-2xl shadow-lg cursor-not-allowed">
+          <img src="image/unitkh2.png" width="297" height="421" />  
+          <h4 class="font-bold text-gray-800 mb-2">Unit 한국사</h4>
+          <p class="text-sm text-gray-600 mb-4">난이도: ◆◆◇◇◇ - ◆◆◆◇◇</p>
+          <button class="btn-gradient w-full py-3 rounded-full text-white font-medium viewBtn" data-detail="unitkh2">다운로드</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- 상세 페이지 -->
+<div id="detailPage" class="hidden min-h-screen bg-gradient-to-br from-blue-100 to-blue-200 p-8">
+  <button id="backBtn" class="mb-6 btn-gradient py-2 px-4 rounded-full text-white font-medium">← 뒤로</button>
+  <div class="bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-xl fade-in slide-up">
+    <h3 class="text-2xl font-bold text-gray-800 mb-2" id="detailTitle">상세 자료</h3>
+    <p class="mb-4 text-gray-700" id="detailDetail">자료 설명이 여기에 들어갑니다.</p>
+    <button class="btn-gradient py-3 px-6 rounded-full text-white font-medium downloadBtn" onClick='downloadFile()'>다운로드</button>
+  </div>
+</div>
+
+<script>
+const loginModal = document.getElementById('loginModal');
+const loginBtn = document.getElementById('loginBtn');
+const passwordInput = document.getElementById('passwordInput');
+const mainPage = document.getElementById('mainPage');
+const detailPage = document.getElementById('detailPage');
+const backBtn = document.getElementById('backBtn');
+const detailTitle = document.getElementById('detailTitle');
+
+//다운로드 스크립트
+  function downloadFile() {
+    // a 태그 동적으로 생성
+    const link = document.createElement("a");
+    link.href = filePath;
+    link.download = (type, ".pdf"); // 저장될 때 파일 이름
+
+    // 자동 클릭
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } 
+  
+// 로그인 처리
+loginBtn.addEventListener('click', ()=>{
+  if(passwordInput.value === '0000'){
+    loginModal.classList.add('hidden');
+    mainPage.classList.remove('hidden');
+  } else {
+    alert('비밀번호가 틀렸습니다.');
+  }
+});
+
+// Enter키 로그인
+passwordInput.addEventListener('keypress', (e)=>{
+  if(e.key === 'Enter'){ loginBtn.click(); }
+});
+
+// 상세보기 버튼
+document.querySelectorAll('.viewBtn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    mainPage.classList.add('hidden');
+    detailPage.classList.remove('hidden');
+    const type = btn.getAttribute('data-detail');
+    if(type==='unitkh2') {
+      detailTitle.textContent='Unit 한국사 II';
+      detailDetail.textContent='2025 2학기 중간고사 대비 자료 총집합.'
+      filePath = "PDF/unitkh2.pdf"
+    }
+  });
+});
+
+// 뒤로 버튼
+backBtn.addEventListener('click', ()=>{
+  detailPage.classList.add('hidden');
+  mainPage.classList.remove('hidden');
+});
+
+// 다운로드 버튼
+document.querySelectorAll('.downloadBtn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const pdf = btn.getAttribute('data-pdf');
+    if(pdf){
+      const link = document.createElement('a');
+      link.href = pdf;
+      link.download = pdf.split('/').pop();
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  });
+});
+</script>
+
+</body>
+</html>
+

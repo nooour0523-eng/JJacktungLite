@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>JJacktung HUB (Splash Screen)</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(#e6f0fa, #bcd8f6);
+      font-family: sans-serif;
+      animation: fadeOut 1s ease-in-out 5s forwards;
+    }
+    .text {
+      text-align: center;
+      opacity: 0;
+      animation: fadeIn 2.5s forwards;
+    }
+    p {
+      font-size: 18px;
+      font-weight: 500;
+    }
+    small {
+      display: block;
+      margin-top: 20px;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; }
+    }
+  </style>
+  <script>
+    setTimeout(() => {
+      window.location.href = "hub.html";
+    }, 3000);
+  </script>
+</head>
+<body>
+  <div class="text">
+    <p>
+      실존했던 역사적 사건과 인물을 바탕으로 각색된 이 가상 시나리오는 다양한 종교 및<br>
+      문화적 배경을 가진 다문화 팀에서 기획, 개발, 제작하였습니다.
+    </p>
+  </div>
+</body>
+</html>
