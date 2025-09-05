@@ -98,7 +98,7 @@ const detailTitle = document.getElementById('detailTitle');
     // a 태그 동적으로 생성
     const link = document.createElement("a");
     link.href = filePath;
-    link.download = (type, ".pdf"); // 저장될 때 파일 이름
+    link.download = ("file.pdf"); // 저장될 때 파일 이름
 
     // 자동 클릭
     document.body.appendChild(link);
